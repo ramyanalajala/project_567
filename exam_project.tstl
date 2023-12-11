@@ -1,0 +1,41 @@
+# exam_project.tstl
+
+# Include the module to be tested
+include exam_project
+
+# Test the Question class
+def test_question():
+    q = Question("Test Question", ["Option 1", "Option 2", "Option 3", "Option 4"], 2, "easy")
+    assert q.is_correct(2)
+    assert not q.is_correct(1)
+
+# Test the User class
+def test_user():
+    u = User("test_user")
+    u.update_score(3)
+    assert u.score == 3
+
+    u.update_time_taken(10)
+    assert u.time_taken >= 0
+
+# Test the Exam class
+def test_exam():
+    q1 = Question("Question 1", ["Option 1", "Option 2", "Option 3", "Option 4"], 2, "easy")
+    q2 = Question("Question 2", ["Option 1", "Option 2", "Option 3", "Option 4"], 1, "medium")
+    q3 = Question("Question 3", ["Option 1", "Option 2", "Option 3", "Option 4"], 3, "hard")
+
+    e = Exam([q1, q2, q3])
+
+    # Mock user input for difficulty level
+    def mock_input(prompt):
+        return "easy"
+
+    with patch("builtins.input", side_effect=mock_input):
+        # Mock user input for question selection
+        with patch("builtins.input", side_effect=["2"]):
+            e.start_exam(User("test_user"))
+
+# Run the tests
+test_question()
+test_user()
+test_exam()
